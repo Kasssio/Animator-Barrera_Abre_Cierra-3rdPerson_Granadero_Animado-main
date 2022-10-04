@@ -6,15 +6,16 @@ using UnityEngine.AI;
 public class AgentScript : MonoBehaviour
 {
     NavMeshAgent agent;
-    [SerializeField] Transform targetTransform;
-    [SerializeField] Transform baseTransform;
+    public Transform targetTransform;
+    [SerializeField] Transform [] baseTransforms;
     public bool chaseMode = false;
-    // Start is called before the first frame update
+    [SerializeField] float distanceToOrigin;
+
+    int baseIndex;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        
-       
     }
 
     // Update is called once per frame
@@ -27,7 +28,16 @@ public class AgentScript : MonoBehaviour
 
         else
         {
-            agent.destination = baseTransform.position;
+            if(agent.remainingDistance < distanceToOrigin && !agent.pathPending)
+            {
+                Debug.Log("Hola :)");
+                baseIndex++;
+                if(baseIndex >= baseTransforms.Length)
+                {
+                    baseIndex = 0;
+                }
+                agent.destination = baseTransforms[baseIndex].position;
+            }
         }
     }
 
